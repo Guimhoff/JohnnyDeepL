@@ -138,6 +138,9 @@ class MainActivity : AppCompatActivity() {
         val destTextUI = findViewById<TextView>(R.id.translationTextView)
         var destText = ""
 
+        val detectedLanguageUI = findViewById<TextView>(R.id.detectedLanguageText)
+        detectedLanguageUI.text = ""
+
         val that = this
 
         AndroidNetworking.get("https://api-free.deepl.com/v2/translate")
@@ -153,6 +156,13 @@ class MainActivity : AppCompatActivity() {
                         val trad = response.getJSONArray("translations").getJSONObject(0)
                         destText = trad.getString("text")
                         destTextUI.text = destText
+
+                        val detectLanguage = trad.getString("detected_source_language")
+
+                        if (detectLanguage != sourceLangue) {
+                            detectedLanguageUI.text = "Langue détectée :\n${languages.filter { it.value == detectLanguage }.keys.first()}"
+                        }
+
                     } catch (e: JSONException) {
                         Toast.makeText(that, "Une erreur est survenue\n ${e.message}", Toast.LENGTH_LONG).show()
                     }
