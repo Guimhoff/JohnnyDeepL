@@ -69,13 +69,13 @@ class ParametersActivity : AppCompatActivity() {
                         saveKey()
                     } catch (e: JSONException) {
                         showNoKey()
-                        Toast.makeText(that, "Une erreur est survenue ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(that, "Une erreur est survenue\n ${e.message}", Toast.LENGTH_LONG).show()
                     }
                 }
 
                 override fun onError(anError: ANError?) {
                     showNoKey()
-                    Toast.makeText(that, "Une erreur de connexion est survenue " + anError.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(that, "Une erreur de connexion est survenue\n" + anError.toString(), Toast.LENGTH_LONG).show()
                 }
             })
     }
