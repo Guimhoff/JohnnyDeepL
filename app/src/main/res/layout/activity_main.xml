@@ -34,6 +34,7 @@
                     android:clickable="true"
                     android:contentDescription="Traduction history button"
                     android:focusable="true"
+                    android:onClick="onClickHistory"
                     android:tintMode="src_in"
                     app:backgroundTint="@color/bleu_1"
                     app:backgroundTintMode="add"

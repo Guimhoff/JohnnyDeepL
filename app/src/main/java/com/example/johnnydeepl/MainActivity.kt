@@ -127,6 +127,12 @@ class MainActivity : AppCompatActivity() {
         startActivity(i)
     }
 
+    fun onClickHistory(view: View) {
+        val i = Intent(this, HistoryActivity::class.java)
+        startActivity(i)
+    }
+
+
     fun onClickTranslate(view: View) {
         if (testKeyNull()) {
             return
