@@ -15,13 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_arrow_back_24" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="409dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton2"
-        tools:layout_editor_absoluteX="1dp" />
-
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
@@ -30,4 +23,17 @@
         android:text="Tout supprimer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/history_recycler_view"
+        android:layout_width="409dp"
+        android:layout_height="673dp"
+        android:layout_marginTop="2dp"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backButton2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

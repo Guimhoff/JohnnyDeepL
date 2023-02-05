@@ -5,43 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/translatedTextView"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:lines="1"
-        android:text="TextView"
-        android:textAlignment="textStart"
-        app:layout_constraintEnd_toStartOf="@+id/deleteElementButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Texte traduit : le texte est trop long, que se passe-t-il ?" />
-
-    <TextView
-        android:id="@+id/originalTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:lines="1"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/translatedTextView"
-        app:layout_constraintStart_toStartOf="@+id/translatedTextView"
-        app:layout_constraintTop_toBottomOf="@+id/translatedTextView"
-        tools:text="Texte original" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/deleteElementButton"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:clickable="true"
-        app:backgroundTint="#989898"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_delete_24" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/deleteElementButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            app:backgroundTint="#989898"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_delete_24" />
+
+        <TextView
+            android:id="@+id/translatedTextView"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="329dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:lines="1"
+            android:text="TextView"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toStartOf="@+id/deleteElementButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Texte traduit : le texte est trop long, que se passe-t-il ?" />
+
+        <TextView
+            android:id="@+id/originalTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:lines="1"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="@+id/translatedTextView"
+            app:layout_constraintTop_toBottomOf="@+id/translatedTextView"
+            tools:text="Texte original" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
