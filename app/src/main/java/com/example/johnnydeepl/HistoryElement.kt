@@ -22,4 +22,25 @@ class HistoryElement {
         this.languageDetect = languageDetect
         this.languageDest = languageDest
     }
+
+    constructor(fromSave: String){
+        try {
+            val liste = fromSave.split("[^\\/]\\|", fromSave)
+            this.textSource = liste[0].replace("/|", "|")
+            this.textTranslated = liste[1].replace("/|", "|")
+            this.languageSource = liste[2]
+            this.languageDetect = liste[3]
+            this.languageDest = liste[4]
+        } catch (e: java.lang.Error) {
+
+        }
+    }
+
+    fun save(): String {
+        val sourceToSave = textSource.replace("|", "/|")
+        val tradToSave = textTranslated.replace("|", "/|")
+
+        return "$sourceToSave|$tradToSave|$languageSource|$languageDetect|$languageDest"
+    }
+
 }
