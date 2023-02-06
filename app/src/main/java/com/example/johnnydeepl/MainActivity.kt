@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadPreferences()
-        loadLanguages()
+        if(DeepLKey != "") loadLanguages()
     }
 
     private fun loadPreferences() {
