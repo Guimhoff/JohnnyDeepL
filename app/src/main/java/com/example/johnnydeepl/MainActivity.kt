@@ -169,6 +169,9 @@ class MainActivity : AppCompatActivity() {
                             detectedLanguageUI.text = "Langue détectée :\n${languages.filter { it.value == detectLanguage }.keys.first()}"
                         }
 
+                        val newTrad = HistoryElement(sourceText, destText, sourceLangue, detectLanguage, destLangue)
+                        appendHist(newTrad)
+
                     } catch (e: JSONException) {
                         Toast.makeText(that, "Une erreur est survenue\n ${e.message}", Toast.LENGTH_LONG).show()
                     }
@@ -181,7 +184,28 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
     }
+
+    fun appendHist(ele: HistoryElement) {
+        val sharedPreferences = getSharedPreferences("History", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        var list = listOf<String>()
+
+        try {
+            val set = sharedPreferences.getStringSet("History", setOf())
+            list = set?.toList() as List<String>
+        } catch (e: Error) {
+
+        }
+
+        val set = HashSet(list + ele.save())
+
+        editor.putStringSet("History", set)
+        editor.apply()
+    }
+
 
     fun onClickPaste(view: View) {
         val clipData = clipboard.primaryClip
