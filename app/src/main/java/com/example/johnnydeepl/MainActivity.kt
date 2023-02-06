@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var DeepLKey = ""
+    private var lastSource = ""
+    private var lastDest = ""
     private lateinit var clipboard: ClipboardManager
 
     private var sourceLangue = ""
@@ -40,6 +43,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sourceTextUI: EditText
     private lateinit var destTextUI: TextView
+    
+    private lateinit var historyPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +61,14 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadPreferences()
+        loadLanguages()
     }
 
     private fun loadPreferences() {
-        DeepLKey =  getSharedPreferences("DeepLKey", MODE_PRIVATE).getString("DeepLKey", "")!!
+        DeepLKey = getSharedPreferences("DeepLKey", MODE_PRIVATE).getString("DeepLKey", "")!!
+        historyPreferences = getSharedPreferences("History", Context.MODE_PRIVATE)
+        lastSource = historyPreferences.getString("lastSource", "")!!
+        lastDest = historyPreferences.getString("lastDest", "")!!
     }
 
     private fun confTextZone() {
@@ -138,12 +147,18 @@ class MainActivity : AppCompatActivity() {
 
         val adapterDest = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesArrayDest)
         spinnerDest.adapter = adapterDest
-
-
+        
+        setSpinners(lastSource, lastDest)
+        
         spinnerSource.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                sourceLangue = languages[parent.getItemAtPosition(position).toString()].toString()
+                lastSource = parent.getItemAtPosition(position).toString()
+                sourceLangue = languages[lastSource].toString()
                 if (sourceLangue == "null") sourceLangue = ""
+
+                val editor = historyPreferences.edit()
+                editor.putString("lastSource", lastSource)
+                editor.commit()
             }
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // aucun élément n'a été sélectionné
@@ -152,7 +167,12 @@ class MainActivity : AppCompatActivity() {
 
         spinnerDest.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                destLangue = languages[parent.getItemAtPosition(position).toString()].toString()
+                lastDest = parent.getItemAtPosition(position).toString()
+                destLangue = languages[lastDest].toString()
+
+                val editor = historyPreferences.edit()
+                editor.putString("lastDest", lastDest)
+                editor.commit()
             }
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // aucun élément n'a été sélectionné
@@ -277,16 +297,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun appendHist(textSource: String, textTranslated: String, languageSource: String, languageDetect: String, languageDest: String) {
-        val sharedPreferences = getSharedPreferences("History", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        
+        val editor = historyPreferences.edit()
 
         var list = listOf<String>()
         var requestNum = 0
 
         try {
-            val set = sharedPreferences.getStringSet("History", setOf())
+            val set = historyPreferences.getStringSet("History", setOf())
             list = set?.toList() as List<String>
-            requestNum = sharedPreferences.getInt("requestNum", 0)
+            requestNum = historyPreferences.getInt("requestNum", 0)
         } catch (_: Error) {
 
         }
