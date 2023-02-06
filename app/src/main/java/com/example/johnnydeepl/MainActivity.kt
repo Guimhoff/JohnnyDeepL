@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.androidnetworking.AndroidNetworking
@@ -29,12 +30,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var spinnerSource: Spinner
     private lateinit var spinnerDest: Spinner
 
+    private lateinit var sourceTextUI: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AndroidNetworking.initialize(this)
         clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
+        confTextZone()
     }
 
     override fun onResume() {
@@ -46,6 +50,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadPreferences(): String? {
         return getSharedPreferences("DeepLKey", MODE_PRIVATE).getString("DeepLKey", "")
+    }
+
+    private fun confTextZone() {
+        sourceTextUI = findViewById(R.id.sourceText)
     }
 
     private fun loadLanguages() {
@@ -134,11 +142,15 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onClickTranslate(view: View) {
+        // On cache le clavier et on sort du focus
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        sourceTextUI.clearFocus()
+
         if (testKeyNull()) {
             return
         }
 
-        val sourceTextUI = findViewById<EditText>(R.id.sourceText)
         val sourceText = sourceTextUI.text.toString()
 
         val destTextUI = findViewById<TextView>(R.id.translationTextView)
@@ -212,7 +224,7 @@ class MainActivity : AppCompatActivity() {
         if (clipData != null) {
             val item = clipData.getItemAt(0)
             val text = item.text.toString()
-            findViewById<EditText>(R.id.sourceText).setText(text)
+            sourceTextUI.setText(text)
         }
     }
 
