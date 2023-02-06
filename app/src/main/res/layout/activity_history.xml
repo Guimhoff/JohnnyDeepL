@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:onClick="onClickBack"
+        android:scaleX=".9"
+        android:scaleY=".9"
         app:backgroundTint="@color/bleu_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +32,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_recycler_view"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipChildren="true"
         android:clipToPadding="true"

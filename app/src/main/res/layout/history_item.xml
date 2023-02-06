@@ -6,9 +6,12 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="413dp"
+        android:id="@+id/entireItem"
+        android:layout_width="match_parent"
         android:layout_height="87dp"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="6dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,7 +33,7 @@
         <TextView
             android:id="@+id/translatedTextView"
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="329dp"
+            android:layout_width="0dp"
             android:layout_height="26dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"

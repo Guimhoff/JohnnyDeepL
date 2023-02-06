@@ -7,8 +7,8 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +29,9 @@
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/historyButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:clickable="true"
                     android:contentDescription="Traduction history button"
@@ -70,6 +72,8 @@
                     android:id="@+id/keyButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:baselineAligned="false"
                     android:clickable="true"
@@ -91,24 +95,32 @@
             android:layout_weight="2.5"
             android:orientation="horizontal">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/pasteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="-10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="-10dp"
-                android:clickable="true"
-                android:contentDescription="Paste button"
-                android:focusable="true"
-                android:onClick="onClickPaste"
-                android:scaleX=".5"
-                android:scaleY=".5"
-                android:tintMode="src_in"
-                app:backgroundTint="@color/bleu_1"
-                app:srcCompat="@drawable/baseline_content_paste_12"
-                app:useCompatPadding="false" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="40dp"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/pasteButton"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:contentDescription="Paste button"
+                    android:focusable="true"
+                    android:onClick="onClickPaste"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:tintMode="src_in"
+                    app:backgroundTint="@color/bleu_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.75"
+                    app:srcCompat="@drawable/baseline_content_paste_12"
+                    app:useCompatPadding="false" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
                 android:id="@+id/sourceText"
@@ -205,22 +217,32 @@
                 android:textColor="#000000"
                 android:textIsSelectable="true" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/copyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="-10dp"
-                android:layout_marginRight="-10dp"
-                android:layout_marginBottom="80dp"
-                android:clickable="true"
-                android:contentDescription="Copy button"
-                android:focusable="true"
-                android:onClick="onClickCopy"
-                android:scaleX=".5"
-                android:scaleY=".5"
-                app:backgroundTint="@color/bleu_1"
-                app:srcCompat="@drawable/baseline_content_copy_24" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="40dp"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/copyButton"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:contentDescription="Copy button"
+                    android:focusable="true"
+                    android:onClick="onClickCopy"
+                    android:rotation="0"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    app:backgroundTint="@color/bleu_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias=".2"
+                    app:srcCompat="@drawable/baseline_content_copy_24" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
     </LinearLayout>
