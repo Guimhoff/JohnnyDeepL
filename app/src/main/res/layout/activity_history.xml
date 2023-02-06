@@ -17,6 +17,7 @@
         app:backgroundTint="@color/bleu_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="30dp"
         app:srcCompat="@drawable/baseline_arrow_back_24" />
 
     <Button
