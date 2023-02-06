@@ -6,13 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class HistoryAdapter(private val context: Context, private val history: Array<HistoryElement>) :
+class HistoryAdapter(
+    private val context: Context,
+    private val history: () -> Array<HistoryElement>,
+    private val removeElement: (Int) -> Unit
+) :
     RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textSource: TextView = itemView.findViewById<TextView>(R.id.originalTextView)
-        val textTranslated: TextView = itemView.findViewById<TextView>(R.id.translatedTextView)
+        val textSource: TextView = itemView.findViewById(R.id.originalTextView)
+        val textTranslated: TextView = itemView.findViewById(R.id.translatedTextView)
+        val buttonDelete: FloatingActionButton = itemView.findViewById(R.id.deleteElementButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,12 +27,15 @@ class HistoryAdapter(private val context: Context, private val history: Array<Hi
     }
 
     override fun getItemCount(): Int {
-        return history.size
+        return history().size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textSource.text = history[position].textSource
-        holder.textTranslated.text = history[position].textTranslated
+        holder.textSource.text = history()[position].textSource
+        holder.textTranslated.text = history()[position].textTranslated
+        holder.buttonDelete.setOnClickListener {
+            removeElement(history()[position].id)
+         }
     }
 }
 

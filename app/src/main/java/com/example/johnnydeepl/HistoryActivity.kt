@@ -7,34 +7,31 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 
 class HistoryActivity : AppCompatActivity() {
     lateinit var history: Array<HistoryElement>
+
+    lateinit var historyView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
-        val historyView = findViewById<RecyclerView>(R.id.history_recycler_view)
+        historyView = findViewById(R.id.history_recycler_view)
 
-        history = arrayOf()
+        //loadHistory()
 
-        loadHistory()
-
-
-
-
-        val historyAdapter = HistoryAdapter( this, history)
+        val historyAdapter = HistoryAdapter( this, { loadHistory() }) { id: Int -> removeElement(id) }
         historyView.adapter = historyAdapter
         historyView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun loadHistory() {
+    private fun loadHistory(): Array<HistoryElement> {
         val sharedPreferences = getSharedPreferences("History", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
 
         var list = listOf<String>()
+
+        history = arrayOf()
 
         try {
             val set = sharedPreferences.getStringSet("History", setOf())
@@ -53,7 +50,29 @@ class HistoryActivity : AppCompatActivity() {
 
         history.sortBy { ele -> -ele.id }
 
+        println(history.size)
 
+        return history
+    }
+
+    private fun removeElement(id: Int) {
+        history = history.filter {it.id != id}.toTypedArray()
+
+        var list = listOf<String>()
+
+        for (ele in history.iterator()) {
+            list += ele.save()
+        }
+
+        val set = HashSet(list)
+
+        val sharedPreferences = getSharedPreferences("History", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("History", set)
+        editor.apply()
+
+        loadHistory()
+        historyView.adapter?.notifyDataSetChanged()
     }
 
     fun onClickDelAll(view: View) {
@@ -63,7 +82,8 @@ class HistoryActivity : AppCompatActivity() {
         editor.putStringSet("History", HashSet())
         editor.commit()
 
-
+        loadHistory()
+        historyView.adapter?.notifyDataSetChanged()
     }
 
     fun onClickBack(view: View) {
