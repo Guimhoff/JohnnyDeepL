@@ -23,10 +23,15 @@ import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        var languages = hashMapOf<String, String>()
+        var languagesArraySource = arrayOf<String>()
+        var languagesArrayDest = arrayOf<String>()
+    }
+
     private var DeepLKey = ""
     private lateinit var clipboard: ClipboardManager
 
-    private var languages = hashMapOf<String, String>()
     private var sourceLangue = ""
     private var destLangue = "null"
 
@@ -43,17 +48,18 @@ class MainActivity : AppCompatActivity() {
         clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
         confTextZone()
+        loadPreferences()
+        loadLanguages()
+        getHistoryElement()
     }
 
     override fun onResume() {
         super.onResume()
-
-        DeepLKey = loadPreferences()!!
-        loadLanguages()
+        loadPreferences()
     }
 
-    private fun loadPreferences(): String? {
-        return getSharedPreferences("DeepLKey", MODE_PRIVATE).getString("DeepLKey", "")
+    private fun loadPreferences() {
+        DeepLKey =  getSharedPreferences("DeepLKey", MODE_PRIVATE).getString("DeepLKey", "")!!
     }
 
     private fun confTextZone() {
@@ -84,13 +90,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadLanguages() {
-        if (testKeyNull()) {
+        if (testKeyNull() || languages.size > 0) {
+            confSpinners()
             return
         }
 
         val that = this
-        spinnerSource = findViewById<Spinner>(R.id.sourceLanguageSpinner)
-        spinnerDest = findViewById<Spinner>(R.id.destinationLanguageSpinner)
 
 
         AndroidNetworking.get("https://api-free.deepl.com/v2/languages")
@@ -107,14 +112,10 @@ class MainActivity : AppCompatActivity() {
                         var languageArray = languages.keys.toList()
                         languageArray = languageArray.sorted()
 
-                        val languagesArraySource = arrayOf("Détecter la langue") + languageArray
-                        val adapterSource = ArrayAdapter(that, android.R.layout.simple_spinner_dropdown_item, languagesArraySource)
-                        spinnerSource.adapter = adapterSource
+                        languagesArraySource = arrayOf("Détecter la langue") + languageArray
+                        languagesArrayDest = languageArray.toTypedArray()
 
-                        val languagesArrayDest = languageArray.toTypedArray()
-                        val adapterDest = ArrayAdapter(that, android.R.layout.simple_spinner_dropdown_item, languagesArrayDest)
-                        spinnerDest.adapter = adapterDest
-
+                        confSpinners()
                     } catch (e: JSONException) {
                         Toast.makeText(that, "Une erreur est survenue lors de la récupération des langages\n ${e.message}", Toast.LENGTH_LONG).show()
                     }
@@ -124,6 +125,20 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(that, "Une erreur de connexion est survenue lors de la récupération des langages\n" + anError.toString(), Toast.LENGTH_LONG).show()
                 }
             })
+
+    }
+
+    private fun confSpinners() {
+        spinnerSource = findViewById<Spinner>(R.id.sourceLanguageSpinner)
+        spinnerDest = findViewById<Spinner>(R.id.destinationLanguageSpinner)
+
+
+        val adapterSource = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesArraySource)
+        spinnerSource.adapter = adapterSource
+
+        val adapterDest = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesArrayDest)
+        spinnerDest.adapter = adapterDest
+
 
         spinnerSource.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -142,6 +157,17 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // aucun élément n'a été sélectionné
             }
+        }
+    }
+
+    private fun getHistoryElement() {
+        val i = intent
+
+        if (i.getSerializableExtra("HistoryElement") != null) {
+            // dépréciée mais la fonction qui la remplace n'est disponible qu'à partir d'Android 33
+            val ele = i.getSerializableExtra("HistoryElement") as HistoryElement
+
+            displayTrad(ele.textSource, ele.textTranslated, ele.languageSource, ele.languageDetect, ele.languageDest)
         }
     }
 
@@ -178,11 +204,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        var destText = ""
-
-        val detectedLanguageUI = findViewById<TextView>(R.id.detectedLanguageText)
-        detectedLanguageUI.text = ""
-
         val that = this
 
         AndroidNetworking.get("https://api-free.deepl.com/v2/translate")
@@ -196,15 +217,11 @@ class MainActivity : AppCompatActivity() {
                     Log.d("JSON", response.toString())
                     try{
                         val trad = response.getJSONArray("translations").getJSONObject(0)
-                        destText = trad.getString("text")
-                        destTextUI.text = destText
+                        val destText = trad.getString("text")
 
                         val detectLanguage = trad.getString("detected_source_language")
 
-                        if (detectLanguage != sourceLangue) {
-                            detectedLanguageUI.text = "Langue détectée :\n${languages.filter { it.value == detectLanguage }.keys.first()}"
-                        }
-
+                        displayTrad(null, destText, null, detectLanguage, destLangue)
                         appendHist(sourceText, destText, sourceLangue, detectLanguage, destLangue)
 
                     } catch (e: JSONException) {
@@ -217,12 +234,49 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-
-
-
     }
 
-    fun appendHist(textSource: String, textTranslated: String, languageSource: String, languageDetect: String, languageDest: String) {
+    private fun displayTrad(sourceText: String?, destText:String?, sourceLangue: String?, detectLanguage: String?, destLangue: String?) {
+
+        val detectedLanguageUI = findViewById<TextView>(R.id.detectedLanguageText)
+
+        if(sourceText != null) {
+            sourceTextUI.setText(sourceText)
+        }
+        if(destText != null) {
+            destTextUI.text = destText
+        }
+        if(detectLanguage != null && destLangue != null && detectLanguage != destLangue) {
+            detectedLanguageUI.text = "Langue détectée :\n${findMatchingLang(detectLanguage)}"
+        } else {
+            detectedLanguageUI.text = ""
+        }
+
+        setSpinners(findMatchingLang(sourceLangue), findMatchingLang(destLangue))
+    }
+
+    private fun setSpinners(langSource: String?, langDest: String?) {
+        if(langSource != null) {
+            spinnerSource.setSelection(languagesArraySource.indexOf(langSource))
+        }
+        if(langDest != null) {
+            spinnerDest.setSelection(languagesArrayDest.indexOf(langDest))
+        }
+    }
+
+    private fun findMatchingLang(code: String?): String? {
+        if (code == null || languages.size == 0) {
+            return null
+        }
+
+        if (code == "") {
+            return "Détecter la langue"
+        }
+
+        return languages.filter { it.value == code }.keys.first()
+    }
+
+    private fun appendHist(textSource: String, textTranslated: String, languageSource: String, languageDetect: String, languageDest: String) {
         val sharedPreferences = getSharedPreferences("History", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 

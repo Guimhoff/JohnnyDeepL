@@ -1,6 +1,8 @@
 package com.example.johnnydeepl
 
-class HistoryElement {
+import java.io.Serializable
+
+class HistoryElement: Serializable {
     var id = 0
     lateinit var textSource: String
     lateinit var textTranslated: String

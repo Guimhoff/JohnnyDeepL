@@ -1,6 +1,7 @@
 package com.example.johnnydeepl
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -21,7 +22,7 @@ class HistoryActivity : AppCompatActivity() {
 
         //loadHistory()
 
-        val historyAdapter = HistoryAdapter( this, { loadHistory() }) { id: Int -> removeElement(id) }
+        val historyAdapter = HistoryAdapter( this, { loadHistory() }, { id: Int -> removeElement(id) }, {ele -> loadElement(ele)})
         historyView.adapter = historyAdapter
         historyView.layoutManager = LinearLayoutManager(this)
     }
@@ -53,6 +54,12 @@ class HistoryActivity : AppCompatActivity() {
         println(history.size)
 
         return history
+    }
+
+    private fun loadElement(ele: HistoryElement){
+        val i = Intent(this, MainActivity::class.java)
+        i.putExtra("HistoryElement", ele)
+        startActivity(i)
     }
 
     private fun removeElement(id: Int) {
