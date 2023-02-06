@@ -25,13 +25,11 @@ class HistoryElement {
     }
 
     constructor(fromSave: String){
-        println(fromSave)
         try {
             val list = fromSave.split("|||")
-            println(list)
             this.id = list[0].toInt()
-            this.textSource = list[1]
-            this.textTranslated = list[2]
+            this.textSource = list[1].replace("||-", "||")
+            this.textTranslated = list[2].replace("||-", "||")
             this.languageSource =  list[3]
             this.languageDetect =  list[4]
             this.languageDest = list[5]
@@ -41,8 +39,11 @@ class HistoryElement {
     }
 
     fun save(): String {
+        // Prévention des injections de séparateurs
+        val sourceToSave = textSource.replace("||", "||-")
+        val tradToSave = textTranslated.replace("||", "||-")
 
-        return "$id|||$textSource|||$textTranslated|||$languageSource|||$languageDetect|||$languageDest"
+        return "$id|||$sourceToSave|||$tradToSave|||$languageSource|||$languageDetect|||$languageDest"
     }
 
 }
