@@ -158,6 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:backgroundTint="@color/bleu_1"
                 android:onClick="onClickTranslate"
                 android:text="Traduire"
                 android:textSize="14sp" />
@@ -218,6 +219,7 @@
                 android:onClick="onClickCopy"
                 android:scaleX=".5"
                 android:scaleY=".5"
+                app:backgroundTint="@color/bleu_1"
                 app:srcCompat="@drawable/baseline_content_copy_24" />
         </LinearLayout>
 

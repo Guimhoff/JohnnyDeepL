@@ -13,12 +13,14 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/deleteElementButton"
-            android:layout_width="53dp"
+            android:layout_width="wrap_content"
             android:layout_height="57dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="15dp"
             android:clickable="true"
+            android:scaleX=".8"
+            android:scaleY=".8"
             app:backgroundTint="#989898"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
