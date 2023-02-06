@@ -13,11 +13,13 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var destTextUI: TextView
     
     private lateinit var historyPreferences: SharedPreferences
+    private var fromHistory = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,6 +191,8 @@ class MainActivity : AppCompatActivity() {
             val ele = i.getSerializableExtra("HistoryElement") as HistoryElement
 
             displayTrad(ele.textSource, ele.textTranslated, ele.languageSource, ele.languageDetect, ele.languageDest)
+            fromHistory = true
+            findViewById<FloatingActionButton>(R.id.historyButton).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_arrow_back_24))
         }
     }
 
@@ -209,8 +214,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickHistory(view: View) {
-        val i = Intent(this, HistoryActivity::class.java)
-        startActivity(i)
+        if(fromHistory) {
+            finish()
+        } else {
+            val i = Intent(this, HistoryActivity::class.java)
+            startActivity(i)
+        }
     }
 
 
