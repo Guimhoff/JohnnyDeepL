@@ -34,6 +34,7 @@
             android:ems="10"
             android:hint="Entrez votre clé..."
             android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
             android:text="4ff7b236-f135-9740-2d06-ea72830c9a3d:fx "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

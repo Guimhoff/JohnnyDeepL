@@ -53,7 +53,7 @@ class ParametersActivity : AppCompatActivity() {
 
         deepLKeyText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                onClickConfirmKey(this)
+                onClickConfirmKey(deepLKeyText)
                 true
             } else {
                 false
@@ -109,10 +109,10 @@ class ParametersActivity : AppCompatActivity() {
         finish()
     }
 
-    fun onClickConfirmKey(view: ParametersActivity) {
+    fun onClickConfirmKey(view: View) {
         // On cache le clavier et on sort du focus
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(deepLKeyText.windowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         deepLKeyText.clearFocus()
 
         // On enlève les potentiels espaces ajoutés par erreur avant ou après la clé
