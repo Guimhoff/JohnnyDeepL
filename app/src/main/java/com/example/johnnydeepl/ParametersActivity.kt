@@ -42,6 +42,9 @@ class ParametersActivity : AppCompatActivity() {
         loadPreferences()
     }
 
+
+    ////// INITIALISATION //////
+
     /**
      * Fonction qui va charger la clé DeepL dans la variable deepLKey
      * et l'afficher dans l'encart texte modifiable par l'utilisateur
@@ -79,6 +82,9 @@ class ParametersActivity : AppCompatActivity() {
         }
     }
 
+
+    ////// GESTION CLÉ //////
+
     /**
      * Sauvegarde la clé DeepL
      */
@@ -88,6 +94,18 @@ class ParametersActivity : AppCompatActivity() {
         editor.putString(keyPreferenceDeepLKey, deepLKey)
         editor.apply()
     }
+
+    /**
+     * Mise à jour de l'interface en cas d'absence de clé fonctionnelle
+     * ou d'échec de connexion
+     */
+    private fun showNoKey() {
+        findViewById<ProgressBar>(R.id.DeepLProgressBar).progress = 0
+        findViewById<TextView>(R.id.DeepLUsageText).text = textNoKey
+    }
+
+
+    ////// GESTION USAGE API //////
 
     /**
      * Envoie une requête pour récupérer la consommation de l'API
@@ -134,14 +152,8 @@ class ParametersActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.DeepLUsageText).text = txt
     }
 
-    /**
-     * Mise à jour de l'interface en cas d'absence de clé fonctionnelle
-     * ou d'échec de connexion
-     */
-    private fun showNoKey() {
-        findViewById<ProgressBar>(R.id.DeepLProgressBar).progress = 0
-        findViewById<TextView>(R.id.DeepLUsageText).text = textNoKey
-    }
+
+    ////// GESTION BOUTONS //////
 
     /**
      * @param view      nécessaire à une méthode onClick
