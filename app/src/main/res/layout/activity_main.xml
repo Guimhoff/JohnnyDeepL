@@ -117,6 +117,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_weight="3"
                 android:clickable="true"
+                android:editable="true"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="Entrez ici votre texte à traduire"

@@ -1,17 +1,16 @@
 package com.example.johnnydeepl
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.textview.MaterialTextView
 import org.json.JSONObject
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
@@ -22,6 +21,7 @@ import org.json.JSONException
 class ParametersActivity : AppCompatActivity() {
     private var DeepLKey = ""
     private lateinit var preferencesFile: SharedPreferences
+    private lateinit var deepLKeyText: EditText
 
     var textNoKey = "Rentrez une clé pour accéder à votre consommation..."
 
@@ -29,6 +29,8 @@ class ParametersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parameters)
         AndroidNetworking.initialize(this)
+
+        confText()
 
         loadPreferences()
     }
@@ -43,6 +45,19 @@ class ParametersActivity : AppCompatActivity() {
             getDeepLUsage()
         } else {
             showNoKey()
+        }
+    }
+
+    private fun confText() {
+        deepLKeyText = findViewById(R.id.DeepLKeyText)
+
+        deepLKeyText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                onClickConfirmKey(this)
+                true
+            } else {
+                false
+            }
         }
     }
 
@@ -94,12 +109,10 @@ class ParametersActivity : AppCompatActivity() {
         finish()
     }
 
-    fun onClickConfirmKey(view: View) {
-        val deepLKeyText = findViewById<EditText>(R.id.DeepLKeyText)
-
+    fun onClickConfirmKey(view: ParametersActivity) {
         // On cache le clavier et on sort du focus
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(deepLKeyText.windowToken, 0)
         deepLKeyText.clearFocus()
 
         // On enlève les potentiels espaces ajoutés par erreur avant ou après la clé

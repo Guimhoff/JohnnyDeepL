@@ -5,11 +5,14 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
@@ -31,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var spinnerDest: Spinner
 
     private lateinit var sourceTextUI: EditText
+    private lateinit var destTextUI: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun confTextZone() {
         sourceTextUI = findViewById(R.id.sourceText)
+        destTextUI = findViewById(R.id.translationTextView)
+
+        sourceTextUI.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                destTextUI.text = ""
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Appelé avant que le texte ne soit modifié
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Appelé lorsque le texte est en train d'être modifié
+            }
+        })
+
+        sourceTextUI.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
+                // On cache le clavier quand le focus est perdu
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(sourceTextUI.windowToken, 0)
+            }
+        }
     }
 
     private fun loadLanguages() {
@@ -80,11 +107,11 @@ class MainActivity : AppCompatActivity() {
                         var languageArray = languages.keys.toList()
                         languageArray = languageArray.sorted()
 
-                        var languagesArraySource = arrayOf("Détecter la langue") + languageArray
+                        val languagesArraySource = arrayOf("Détecter la langue") + languageArray
                         val adapterSource = ArrayAdapter(that, android.R.layout.simple_spinner_dropdown_item, languagesArraySource)
                         spinnerSource.adapter = adapterSource
 
-                        var languagesArrayDest = languageArray.toTypedArray()
+                        val languagesArrayDest = languageArray.toTypedArray()
                         val adapterDest = ArrayAdapter(that, android.R.layout.simple_spinner_dropdown_item, languagesArrayDest)
                         spinnerDest.adapter = adapterDest
 
@@ -142,18 +169,15 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onClickTranslate(view: View) {
-        // On cache le clavier et on sort du focus
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        // On sort du focus
         sourceTextUI.clearFocus()
-
-        if (testKeyNull()) {
-            return
-        }
 
         val sourceText = sourceTextUI.text.toString()
 
-        val destTextUI = findViewById<TextView>(R.id.translationTextView)
+        if (testKeyNull() || sourceText == "") {
+            return
+        }
+
         var destText = ""
 
         val detectedLanguageUI = findViewById<TextView>(R.id.detectedLanguageText)
@@ -181,8 +205,7 @@ class MainActivity : AppCompatActivity() {
                             detectedLanguageUI.text = "Langue détectée :\n${languages.filter { it.value == detectLanguage }.keys.first()}"
                         }
 
-                        val newTrad = HistoryElement(sourceText, destText, sourceLangue, detectLanguage, destLangue)
-                        appendHist(newTrad)
+                        appendHist(sourceText, destText, sourceLangue, detectLanguage, destLangue)
 
                     } catch (e: JSONException) {
                         Toast.makeText(that, "Une erreur est survenue\n ${e.message}", Toast.LENGTH_LONG).show()
@@ -199,22 +222,27 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun appendHist(ele: HistoryElement) {
+    fun appendHist(textSource: String, textTranslated: String, languageSource: String, languageDetect: String, languageDest: String) {
         val sharedPreferences = getSharedPreferences("History", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
         var list = listOf<String>()
+        var requestNum = 0
 
         try {
             val set = sharedPreferences.getStringSet("History", setOf())
             list = set?.toList() as List<String>
-        } catch (e: Error) {
+            requestNum = sharedPreferences.getInt("requestNum", 0)
+        } catch (_: Error) {
 
         }
+
+        val ele = HistoryElement(requestNum, textSource, textTranslated, languageSource, languageDetect, languageDest)
 
         val set = HashSet(list + ele.save())
 
         editor.putStringSet("History", set)
+        editor.putInt("requestNum", requestNum + 1)
         editor.apply()
     }
 

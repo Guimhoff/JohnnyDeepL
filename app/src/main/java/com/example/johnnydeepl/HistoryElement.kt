@@ -1,6 +1,7 @@
 package com.example.johnnydeepl
 
 class HistoryElement {
+    var id = 0
     lateinit var textSource: String
     lateinit var textTranslated: String
     lateinit var languageSource: String
@@ -8,12 +9,14 @@ class HistoryElement {
     lateinit var languageDest: String
 
     constructor(
+        id: Int,
         textSource: String,
         textTranslated: String,
         languageSource: String,
         languageDetect: String,
         languageDest: String
     ) {
+        this.id = id
         this.textSource = textSource
         this.textTranslated = textTranslated
         this.languageSource = languageSource
@@ -26,11 +29,12 @@ class HistoryElement {
         try {
             val list = fromSave.split("|||")
             println(list)
-            this.textSource = list[0]
-            this.textTranslated = list[1]
-            this.languageSource =  list[2]
-            this.languageDetect =  list[3]
-            this.languageDest = list[4]
+            this.id = list[0].toInt()
+            this.textSource = list[1]
+            this.textTranslated = list[2]
+            this.languageSource =  list[3]
+            this.languageDetect =  list[4]
+            this.languageDest = list[5]
         } catch (e: java.lang.Error) {
 
         }
@@ -38,7 +42,7 @@ class HistoryElement {
 
     fun save(): String {
 
-        return "$textSource|||$textTranslated|||$languageSource|||$languageDetect|||$languageDest"
+        return "$id|||$textSource|||$textTranslated|||$languageSource|||$languageDetect|||$languageDest"
     }
 
 }

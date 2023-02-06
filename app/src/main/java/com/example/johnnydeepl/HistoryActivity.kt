@@ -51,6 +51,8 @@ class HistoryActivity : AppCompatActivity() {
             }
         }
 
+        history.sortBy { ele -> -ele.id }
+
 
     }
 
