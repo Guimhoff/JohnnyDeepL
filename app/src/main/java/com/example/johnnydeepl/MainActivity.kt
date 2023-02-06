@@ -144,14 +144,13 @@ class MainActivity : AppCompatActivity() {
         spinnerSource = findViewById<Spinner>(R.id.sourceLanguageSpinner)
         spinnerDest = findViewById<Spinner>(R.id.destinationLanguageSpinner)
 
-
         val adapterSource = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesArraySource)
         spinnerSource.adapter = adapterSource
 
         val adapterDest = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesArrayDest)
         spinnerDest.adapter = adapterDest
         
-        setSpinners(lastSource, lastDest)
+        if(!fromHistory) setSpinners(lastSource, lastDest)
         
         spinnerSource.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
