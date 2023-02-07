@@ -253,11 +253,13 @@ class MainActivity : AppCompatActivity() {
         val i = intent
 
         if (i.getSerializableExtra("HistoryElement") != null) {
-            // dépréciée mais la fonction qui la remplace n'est disponible qu'à partir d'Android 33
+            // Dépréciée mais la fonction qui la remplace n'est disponible qu'à partir d'Android 33
             val ele = i.getSerializableExtra("HistoryElement") as HistoryElement
 
+            // Affichage de la traduction enregistrée
             displayTrad(ele.textSource, ele.textTranslated, ele.languageSource, ele.languageDetect, ele.languageDest)
             fromHistory = true
+            // Changement de l'icone de l'historique
             findViewById<FloatingActionButton>(R.id.historyButton).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_arrow_back_24))
         }
     }
@@ -387,7 +389,7 @@ class MainActivity : AppCompatActivity() {
 
         // Si la langue est détectée (option "Détecter la langue") sourceLangue et detectLanguage sont différentes
         // on affiche donc la langue détectée
-        if(detectLanguage != null && destLangue != null && detectLanguage != destLangue) {
+        if(detectLanguage != null && sourceLangue != null && detectLanguage != sourceLangue) {
             val text = "Langue détectée :\n${findMatchingLang(detectLanguage)}"
             detectedLanguageUI.text = text
         } else {
