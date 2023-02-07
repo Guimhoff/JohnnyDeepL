@@ -182,6 +182,11 @@ class MainActivity : AppCompatActivity() {
         spinnerSource = findViewById(R.id.sourceLanguageSpinner)
         spinnerDest = findViewById(R.id.destinationLanguageSpinner)
 
+        // Si les spinners ont déjà été configurés on ne recommence pas
+        if(spinnerSource.adapter != null) {
+            return
+        }
+
         // Ajout d'adapters aux spinners
         val adapterSource = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesArraySource)
         spinnerSource.adapter = adapterSource
