@@ -82,7 +82,7 @@ class HistoryActivity : AppCompatActivity() {
      */
     private fun loadElement(ele: HistoryElement){
         val i = Intent(this, MainActivity::class.java)
-        i.putExtra("HistoryElement", ele)
+        i.putExtra("HistoryElement", ele.save())
         startActivity(i)
     }
 

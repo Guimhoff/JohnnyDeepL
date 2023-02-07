@@ -253,9 +253,9 @@ class MainActivity : AppCompatActivity() {
     private fun getHistoryElement() {
         val i = intent
 
-        if (i.getSerializableExtra("HistoryElement") != null) {
+        if (i.getStringExtra("HistoryElement") != null) {
             // Dépréciée mais la fonction qui la remplace n'est disponible qu'à partir d'Android 33
-            val ele = i.getSerializableExtra("HistoryElement") as HistoryElement
+            val ele = HistoryElement(i.getStringExtra("HistoryElement")!!)
 
             // Affichage de la traduction enregistrée
             displayTrad(ele.textSource, ele.textTranslated, ele.languageSource, ele.languageDetect, ele.languageDest)

@@ -2,7 +2,7 @@ package com.example.johnnydeepl
 
 import java.io.Serializable
 
-class HistoryElement: Serializable {
+class HistoryElement {
     var id = 0                                  // Id permettant de classer les éléments par ordre d'ancienneté
     lateinit var textSource: String             // Texte original
     lateinit var textTranslated: String         // Texte traduit
