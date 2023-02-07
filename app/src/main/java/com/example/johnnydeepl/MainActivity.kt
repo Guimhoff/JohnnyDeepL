@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                 // Appelé après la modification du texte
                 // La vue de la traduction est vidée de la traduction précédente quand le texte source est modifié
                 destTextUI.text = ""
+                findViewById<TextView>(R.id.detectedLanguageText).text = ""
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
