@@ -32,6 +32,17 @@ class HistoryActivity : AppCompatActivity() {
         historyView.layoutManager = LinearLayoutManager(this)
     }
 
+    /**
+     * Fonction exécutée quand la vue est réouverte
+     */
+    override fun onResume() {
+        super.onResume()
+
+        // On recharge l'historique (cas du retour depuis MainActivity quand une trad de l'historique a été chargée)
+        loadHistory()
+        historyView.adapter?.notifyDataSetChanged()
+    }
+
 
     ////// GESTION DE L'HISTORIQUE //////
 
