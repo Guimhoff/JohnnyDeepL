@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         spinnerDest = findViewById(R.id.destinationLanguageSpinner)
 
         // Si les spinners ont déjà été configurés on ne recommence pas
-        if(spinnerSource.adapter != null) {
+        if(spinnerSource.adapter != null && spinnerSource.adapter.count > 0) {
             return
         }
 
