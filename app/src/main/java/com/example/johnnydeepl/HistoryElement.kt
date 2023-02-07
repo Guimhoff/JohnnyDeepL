@@ -3,13 +3,16 @@ package com.example.johnnydeepl
 import java.io.Serializable
 
 class HistoryElement: Serializable {
-    var id = 0
-    lateinit var textSource: String
-    lateinit var textTranslated: String
-    lateinit var languageSource: String
-    lateinit var languageDetect: String
-    lateinit var languageDest: String
+    var id = 0                                  // Id permettant de classer les éléments par ordre d'ancienneté
+    lateinit var textSource: String             // Texte original
+    lateinit var textTranslated: String         // Texte traduit
+    lateinit var languageSource: String         // Langue originale renseignée
+    lateinit var languageDetect: String         // Langue originale détectée
+    lateinit var languageDest: String           // Langue de traduction
 
+    /**
+     * Constructeur explicite
+     */
     constructor(
         id: Int,
         textSource: String,
@@ -26,6 +29,10 @@ class HistoryElement: Serializable {
         this.languageDest = languageDest
     }
 
+    /**
+     * Constructeur prenant en entrée un chaine de caractères
+     * représentant une sauvegarde (obtenue avec la fonction "save()")
+     */
     constructor(fromSave: String){
         try {
             val list = fromSave.split("|||")
@@ -36,10 +43,15 @@ class HistoryElement: Serializable {
             this.languageDetect =  list[4]
             this.languageDest = list[5]
         } catch (e: java.lang.Error) {
-
+            println(e.message)
         }
     }
 
+    /**
+     * Fonction qui concatène la classe en une string
+     * Pourrait être remplacé par l'utilisation de méthodes de Serializable,
+     * mais prendrait plus de place et serait moins intéressant :)
+     */
     fun save(): String {
         // Prévention des injections de séparateurs
         val sourceToSave = textSource.replace("||", "||-")
