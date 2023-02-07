@@ -49,7 +49,7 @@ class HistoryElement {
 
     /**
      * Fonction qui concatène la classe en une string
-     * Pourrait être remplacé par l'utilisation de méthodes de Serializable,
+     * Pourrait être remplacé par la serialization de la classe,
      * mais prendrait plus de place et serait moins intéressant :)
      */
     fun save(): String {
