@@ -463,8 +463,24 @@ class MainActivity : AppCompatActivity() {
         // Création d'un élément d'historique avec les données fournies
         val ele = HistoryElement(requestNum, textSource, textTranslated, languageSource, languageDetect, languageDest)
 
+        // On retire les éléments en trop si il y a plus de 9 éléments déjà enregistrés
+        if (list.size > 9) {
+            var history = arrayOf<HistoryElement>()
+            for (n in list.indices) {
+                history += HistoryElement(list[n])
+            }
+            history.sortBy { ele -> -ele.id }
+            history = history.take(9).toTypedArray()
+            list = listOf()
+            for (ele in history.iterator()) {
+                list += ele.save()
+            }
+        }
+
+
         // Ajout de l'élément à la liste des éléments
         val set = HashSet(list + ele.save())
+
 
         // Sauvegarde des données mises à jour
         editor.putStringSet("History", set)
