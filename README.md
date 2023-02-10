@@ -1,3 +1,5 @@
+[![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
+
 <img src="/images/icone.png" width="60" />
 
 # Johnny DeepL
@@ -80,4 +82,12 @@ Vue configuration sombre :
 
 
 
+## License
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Cette œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>
+
+
+[cc-by-nc]: http://creativecommons.org/licenses/by-nc-sa/4.0/
+[cc-by-nc-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
+[cc-by-nc-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
 
