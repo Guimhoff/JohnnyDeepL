@@ -1,3 +1,5 @@
+<img src="/images/icone.png" width="60" />
+
 # Johnny DeepL
 
 
